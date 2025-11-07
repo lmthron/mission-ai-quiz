@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission AI - Track Placement Quiz</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: #f5f5f5;
+        }
+        * {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+        const { AlertCircle, CheckCircle, ArrowRight } = lucide;
+
+        const AILearningQuiz = () => {
+          const [answers, setAnswers] = useState({});
+          const [showResults, setShowResults] = useState(false);
+
+          const questions = [
+            {
+              id: 1,
+              question: "How often do you currently use AI tools (ChatGPT, Claude, Copilot, etc.) for work?",
+              options: [
+                { value: 'a', label: "Never or almost never", points: 1 },
+                { value: 'b', label: "I've tried it a few times but don't use it regularly", points: 2 },
+                { value: 'c', label: "Weekly - I use it when I remember or for specific tasks", points: 3 },
+                { value: 'd', label: "Daily - it's part of my regular workflow", points: 4 },
+                { value: 'e', label: "Multiple times per day - I couldn't do my job efficiently without it", points: 5 }
+              ]
+            },
+            {
+              id: 2,
+              question: "Which statement best describes your comfort level with AI tools?",
+              options: [
+                { value: 'a', label: "I'm not sure how to start or what to ask", points: 1 },
+                { value: 'b', label: "I can use it for simple tasks but the results are hit-or-miss", points: 2 },
+                { value: 'c', label: "I get decent results but wish I knew how to make it more useful", points: 3 },
+                { value: 'd', label: "I'm confident with prompting and know how to refine outputs", points: 4 },
+                { value: 'e', label: "I could teach others advanced techniques and build custom solutions", points: 5 }
+              ]
+            },
+            {
+              id: 3,
+              question: "What's your technical background?",
+              options: [
+                { value: 'a', label: "Non-technical - I use software but don't code", points: 1 },
+                { value: 'b', label: "I understand basic tech concepts but don't write code", points: 2 },
+                { value: 'c', label: "I can edit code or write simple scripts if needed", points: 3 },
+                { value: 'd', label: "I code regularly and understand APIs and data structures", points: 4 },
+                { value: 'e', label: "I'm a developer and comfortable with system architecture", points: 5 }
+              ]
+            },
+            {
+              id: 4,
+              question: "How familiar are you with APIs and integrations?",
+              options: [
+                { value: 'a', label: "I don't know what an API is", points: 1 },
+                { value: 'b', label: "I've heard of APIs but never worked with one", points: 2 },
+                { value: 'c', label: "I understand what APIs are conceptually", points: 3 },
+                { value: 'd', label: "I've used APIs or integrated tools before", points: 4 },
+                { value: 'e', label: "I regularly build API integrations or could explain REST to someone", points: 5 }
+              ]
+            },
+            {
+              id: 5,
+              question: "What do you want to learn? (Select the ONE that resonates most)",
+              options: [
+                { value: 'a', label: "How to use AI tools confidently for my daily work tasks", points: 1 },
+                { value: 'b', label: "Better prompting techniques to get more useful results", points: 2 },
+                { value: 'c', label: "How to build simple AI workflows or automate repetitive tasks", points: 3 },
+                { value: 'd', label: "How to integrate AI into applications or systems", points: 4 },
+                { value: 'e', label: "How to architect complex AI systems for production use", points: 5 }
+              ]
+            },
+            {
+              id: 6,
+              question: 'If you had to complete this task: "Use AI to extract key information from 10 customer emails and create a summary spreadsheet," how would you approach it?',
+              options: [
+                { value: 'a', label: "I wouldn't know where to start", points: 1 },
+                { value: 'b', label: "I'd copy/paste each email into AI and manually compile results", points: 2 },
+                { value: 'c', label: "I'd write a detailed prompt to process all emails at once", points: 3 },
+                { value: 'd', label: "I'd consider using an API to automate the process", points: 4 },
+                { value: 'e', label: "I'd design a system with proper data handling, validation, and error checking", points: 5 }
+              ]
+            },
+            {
+              id: 7,
+              question: "Which describes what you want to build with AI?",
+              options: [
+                { value: 'a', label: "I don't need to build anything, I just want to use it better", points: 1 },
+                { value: 'b', label: "Better prompts and templates I can reuse", points: 2 },
+                { value: 'c', label: "Simple workflows or tools that make my work easier", points: 3 },
+                { value: 'd', label: "Applications that integrate AI into existing systems", points: 4 },
+                { value: 'e', label: "Production-grade AI systems with proper architecture", points: 5 }
+              ]
+            },
+            {
+              id: 8,
+              question: "How comfortable are you with ambiguity and experimentation?",
+              options: [
+                { value: 'a', label: "I prefer clear step-by-step instructions", points: 1 },
+                { value: 'b', label: "I can follow instructions but struggle when things don't work as expected", points: 2 },
+                { value: 'c', label: "I'm comfortable experimenting if I have some guidance", points: 3 },
+                { value: 'd', label: "I'm fine figuring things out through trial and error", points: 4 },
+                { value: 'e', label: "I thrive in ambiguous situations and prefer conceptual frameworks over recipes", points: 5 }
+              ]
+            },
+            {
+              id: 9,
+              question: "What's your primary learning goal with AI?",
+              options: [
+                { value: 'a', label: "Learn the fundamentals and how to start using AI confidently", points: 1 },
+                { value: 'b', label: "Improve my prompting skills and get more consistent results", points: 2 },
+                { value: 'c', label: "Apply AI more effectively to my specific role and tasks", points: 3 },
+                { value: 'd', label: "Build workflows and integrate AI into applications", points: 4 },
+                { value: 'e', label: "Design complex AI systems and understand production architecture", points: 5 }
+              ]
+            },
+            {
+              id: 10,
+              question: "Looking at these samples, which feels most appropriate to your skill level?",
+              description: (
+                <div className="space-y-4 my-4 text-sm">
+                  <div className="bg-gray-50 p-3 rounded">
+                    <div className="font-semibold mb-2">Sample A:</div>
+                    <div className="font-mono text-xs">"Write an email to schedule a meeting"</div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <div className="font-semibold mb-2">Sample B:</div>
+                    <div className="font-mono text-xs whitespace-pre-wrap">{`"You are a professional email writer. Write a polite email to schedule a meeting with:
+- Recipient: [name]
+- Purpose: [topic]  
+- Duration: 30 minutes
+- Suggested times: [options]
+Format: Professional but friendly tone"`}</div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <div className="font-semibold mb-2">Sample C:</div>
+                    <div className="font-mono text-xs whitespace-pre-wrap">{`import anthropic
+client = anthropic.Anthropic(api_key="sk-...")
+response = client.messages.create(
+    model="claude-sonnet-4-20250514",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "Hello"}]
+)`}</div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <div className="font-semibold mb-2">Sample D:</div>
+                    <div className="font-mono text-xs whitespace-pre-wrap">{`class AIWorkflow:
+    def __init__(self, model, system_prompt):
+        self.model = model
+        self.system_prompt = system_prompt
+    
+    def process_batch(self, items):
+        results = []
+        for item in items:
+            result = self.call_api(item)
+            results.append(self.validate(result))
+        return self.aggregate(results)`}</div>
+                  </div>
+                </div>
+              ),
+              options: [
+                { value: 'a', label: "Sample A feels right - I just need to know what to ask", points: 1 },
+                { value: 'b', label: "Sample B feels right - I want to write better prompts", points: 2 },
+                { value: 'c', label: "Sample C feels right - I can understand and modify this code", points: 3 },
+                { value: 'd', label: "Sample D feels right - I work with code like this regularly", points: 4 },
+                { value: 'e', label: "None of these - I'm thinking about multi-step systems and architecture", points: 5 }
+              ]
+            }
+          ];
+
+          const handleAnswerChange = (questionId, value, points) => {
+            setAnswers(prev => ({
+              ...prev,
+              [questionId]: { value, points }
+            }));
+          };
+
+          const calculateResults = () => {
+            const aiExperienceQuestions = [1, 2, 5, 9];
+            const technicalSkillsQuestions = [3, 4, 10];
+            const applicationThinkingQuestions = [6, 7, 8];
+
+            const calculateCategoryAverage = (questionIds) => {
+              const categoryAnswers = questionIds.map(id => answers[id]?.points || 0);
+              return categoryAnswers.reduce((sum, pts) => sum + pts, 0) / categoryAnswers.length;
+            };
+
+            const aiExperienceScore = calculateCategoryAverage(aiExperienceQuestions);
+            const technicalScore = calculateCategoryAverage(technicalSkillsQuestions);
+            const applicationScore = calculateCategoryAverage(applicationThinkingQuestions);
+
+            const weightedAverage = (aiExperienceScore * 0.4) + (technicalScore * 0.4) + (applicationScore * 0.2);
+
+            let track;
+            let reason = '';
+
+            if (aiExperienceScore <= 2.0 && technicalScore <= 2.0) {
+              track = 'beginner';
+              reason = 'Building foundation in both AI usage and technical concepts';
+            } else if (technicalScore >= 4.5 && aiExperienceScore >= 3.5) {
+              track = 'advanced';
+              reason = 'Strong technical background combined with solid AI experience';
+            } else if (technicalScore >= 4.0) {
+              if (weightedAverage >= 3.8) {
+                track = 'advanced';
+                reason = 'Technical expertise ready for advanced concepts';
+              } else {
+                track = 'intermediate';
+                reason = 'Strong technical skills will accelerate your learning';
+              }
+            } else if (weightedAverage <= 2.3) {
+              track = 'beginner';
+              reason = 'Perfect starting point for building AI skills';
+            } else if (weightedAverage <= 3.7) {
+              track = 'intermediate';
+              reason = 'Ready to build and create with AI tools';
+            } else {
+              track = 'advanced';
+              reason = 'Prepared for advanced AI system design';
+            }
+
+            if (track === 'beginner') {
+              return {
+                track: 'Beginner Track',
+                description: 'Start here if you\'re new to AI or use it infrequently. You\'ll get clear, structured learning with hands-on practice focused on using AI tools effectively in your daily work.',
+                details: [
+                  '24 weeks of structured lessons (new module weekly)',
+                  'Hands-on exercises with ChatGPT, Claude, and Copilot',
+                  'Build confidence with quick wins',
+                  'No technical background required',
+                  'Bi-weekly community discussion sessions'
+                ],
+                color: '#4AAFE9',
+                reason: reason,
+                note: null
+              };
+            } else if (track === 'intermediate') {
+              return {
+                track: 'Intermediate Learning Path',
+                description: 'Perfect if you\'re comfortable with AI tools and want to build workflows. You have some coding experience and want to create solutions, not just use existing tools.',
+                details: [
+                  '16 self-paced modules (new module weekly)',
+                  'Requires Claude access through My Apps',
+                  'Build with Claude Skills and Artifacts',
+                  'Learn API concepts and integration patterns',
+                  'Conceptual learning with demonstrations',
+                  'Focus on workflow automation and system thinking'
+                ],
+                color: '#009245',
+                reason: reason,
+                note: 'This path primarily uses Claude'
+              };
+            } else {
+              return {
+                track: 'Advanced Learning Path',
+                description: 'Ideal if you\'re already building with AI and need architectural guidance. You\'re comfortable with system design and want to understand production deployment and scaling.',
+                details: [
+                  '12 self-paced modules (new module every other week)',
+                  'Requires Claude access through My Apps',
+                  'Hands-on with Claude Code',
+                  'Multi-agent systems and architecture',
+                  'Production deployment considerations',
+                  'Focus on system design patterns and evaluation'
+                ],
+                color: '#7EE90C',
+                reason: reason,
+                note: 'This path primarily uses Claude'
+              };
+            }
+          };
+
+          const handleSubmit = () => {
+            if (Object.keys(answers).length === questions.length) {
+              setShowResults(true);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          };
+
+          const handleRetake = () => {
+            setAnswers({});
+            setShowResults(false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          };
+
+          const allQuestionsAnswered = Object.keys(answers).length === questions.length;
+
+          if (showResults) {
+            const result = calculateResults();
+            return React.createElement('div', { className: "max-w-4xl mx-auto p-6" },
+              React.createElement('div', { 
+                className: "bg-white rounded-lg shadow-lg p-8 border-t-4",
+                style: { borderTopColor: result.color }
+              },
+                React.createElement('div', { className: "flex items-center mb-6" },
+                  React.createElement(CheckCircle, { size: 40, style: { color: result.color }, className: "mr-4" }),
+                  React.createElement('div', null,
+                    React.createElement('h2', { className: "text-3xl font-bold", style: { color: '#121629' }}, "Your Recommended Track"),
+                    React.createElement('p', { className: "text-gray-600 mt-1" }, "Based on your responses")
+                  )
+                ),
+                React.createElement('div', { className: "mb-6" },
+                  React.createElement('h3', { className: "text-2xl font-bold mb-3", style: { color: result.color }}, result.track),
+                  React.createElement('p', { className: "text-lg mb-2", style: { color: '#121629' }}, result.description),
+                  result.note && React.createElement('p', { 
+                    className: "text-sm font-semibold mt-3", 
+                    style: { color: '#031E94' }
+                  }, `Note: ${result.note}`),
+                  result.reason && React.createElement('p', { 
+                    className: "text-sm italic mt-2", 
+                    style: { color: '#031E94' }
+                  }, `Why this track? ${result.reason}`)
+                ),
+                React.createElement('div', { className: "bg-gray-50 rounded-lg p-6 mb-6" },
+                  React.createElement('h4', { className: "font-bold mb-3", style: { color: '#031E94' }}, "What's Included:"),
+                  React.createElement('ul', { className: "space-y-2" },
+                    result.details.map((detail, index) =>
+                      React.createElement('li', { key: index, className: "flex items-start" },
+                        React.createElement(CheckCircle, { size: 20, style: { color: result.color }, className: "mr-2 mt-0.5 flex-shrink-0" }),
+                        React.createElement('span', { style: { color: '#121629' }}, detail)
+                      )
+                    )
+                  )
+                ),
+                React.createElement('div', { 
+                  className: "bg-blue-50 border-l-4 p-4 mb-6",
+                  style: { borderLeftColor: '#031E94' }
+                },
+                  React.createElement('div', { className: "flex items-start" },
+                    React.createElement(AlertCircle, { size: 20, style: { color: '#031E94' }, className: "mr-2 mt-0.5 flex-shrink-0" }),
+                    React.createElement('div', null,
+                      React.createElement('p', { className: "font-semibold", style: { color: '#031E94' }}, "Not sure this is the right fit?"),
+                      React.createElement('p', { className: "text-sm mt-1", style: { color: '#121629' }}, 
+                        "You can always switch tracks. If Week 1 feels too easy or too hard, move up or down with no penalty."
+                      )
+                    )
+                  )
+                ),
+                React.createElement('div', { className: "flex gap-4" },
+                  React.createElement('button', {
+                    onClick: () => window.open('https://connexpay.atlassian.net/wiki/spaces/AI/overview?homepageId=3935338814', '_blank'),
+                    className: "flex-1 px-6 py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity flex items-center justify-center",
+                    style: { backgroundColor: '#031E94' }
+                  },
+                    "Go to AI Learning Program",
+                    React.createElement(ArrowRight, { size: 20, className: "ml-2" })
+                  ),
+                  React.createElement('button', {
+                    onClick: handleRetake,
+                    className: "px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors",
+                    style: { color: '#031E94', border: '2px solid #031E94' }
+                  }, "Retake Quiz")
+                )
+              )
+            );
+          }
+
+          return React.createElement('div', { className: "max-w-4xl mx-auto p-6" },
+            React.createElement('div', { className: "bg-white rounded-lg shadow-lg p-8 mb-6" },
+              React.createElement('div', { className: "mb-6" },
+                React.createElement('h1', { 
+                  className: "text-3xl font-bold mb-2",
+                  style: { color: '#031E94' }
+                }, "AI Learning Program - Track Placement Quiz"),
+                React.createElement('p', { className: "text-gray-600" }, 
+                  "This takes about 5 minutes. Answer honestly - there are no wrong answers."
+                )
+              ),
+              React.createElement('div', { className: "space-y-8" },
+                questions.map((q, index) =>
+                  React.createElement('div', { 
+                    key: q.id,
+                    className: "border-b pb-6 last:border-b-0"
+                  },
+                    React.createElement('h3', { 
+                      className: "font-semibold text-lg mb-3",
+                      style: { color: '#121629' }
+                    }, `${index + 1}. ${q.question}`),
+                    q.description && React.createElement('div', { className: "mb-4" }, q.description),
+                    React.createElement('div', { className: "space-y-2" },
+                      q.options.map((option) =>
+                        React.createElement('label', {
+                          key: option.value,
+                          className: "flex items-start p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors",
+                          style: {
+                            backgroundColor: answers[q.id]?.value === option.value ? '#E6F2FF' : 'transparent',
+                            borderLeft: answers[q.id]?.value === option.value ? '3px solid #4AAFE9' : '3px solid transparent'
+                          }
+                        },
+                          React.createElement('input', {
+                            type: "radio",
+                            name: `question-${q.id}`,
+                            value: option.value,
+                            checked: answers[q.id]?.value === option.value,
+                            onChange: () => handleAnswerChange(q.id, option.value, option.points),
+                            className: "mt-1 mr-3",
+                            style: { accentColor: '#031E94' }
+                          }),
+                          React.createElement('span', { style: { color: '#121629' }}, option.label)
+                        )
+                      )
+                    )
+                  )
+                )
+              ),
+              React.createElement('div', { className: "mt-8 flex items-center justify-between" },
+                React.createElement('div', { 
+                  className: "text-sm",
+                  style: { color: '#121629' }
+                }, `${Object.keys(answers).length} of ${questions.length} questions answered`),
+                React.createElement('button', {
+                  onClick: handleSubmit,
+                  disabled: !allQuestionsAnswered,
+                  className: "px-8 py-3 rounded-lg text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90",
+                  style: {
+                    backgroundColor: allQuestionsAnswered ? '#031E94' : '#CCCCCC'
+                  }
+                }, "Get My Results")
+              )
+            )
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(AILearningQuiz));
+    </script>
+</body>
+</html>
